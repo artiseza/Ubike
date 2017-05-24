@@ -458,7 +458,7 @@ public class Ubike extends AppCompatActivity {
                                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
                                 Map.addMarker(end);
 
-                                String url = getDirectionsUrl(myPosition, markerPosition);//第一個座標LatLng 導航至第二個座標LatLng
+                                String url = getDirectionsUrl(myPosition, markerPosition,"WALKING");//第一個座標LatLng 導航至第二個座標LatLng
                                 DownloadTask downloadTask = new DownloadTask();
                                 // Start downloading json data from Google Directions
                                 // API
@@ -627,7 +627,7 @@ public class Ubike extends AppCompatActivity {
         return distance;
     }
 
-    private String getDirectionsUrl(LatLng origin, LatLng dest) {
+    private String getDirectionsUrl(LatLng origin, LatLng dest,String mode) {
 
         // Origin of route
         String str_origin = "origin=" + origin.latitude + ","
@@ -636,11 +636,15 @@ public class Ubike extends AppCompatActivity {
         // Destination of route
         String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
 
+        //travel Mode
+//        String str_travel = "mode=" + travel;
+
         // Sensor enabled
-        String sensor = "sensor=false";
+//        String sensor = "sensor=false";
 
         // Building the parameters to the web service
-        String parameters = str_origin + "&" + str_dest + "&" + sensor;
+//        String parameters = str_origin + "&" + str_dest + "&" +str_travel+"&"+ sensor;
+        String parameters = str_origin + "&" + str_dest + "&sensor=true&language=zh-TW&mode="+mode;
 
         // Output format
         String output = "json";
