@@ -7,12 +7,16 @@ package com.example.user.ubike;
 public class UbikeList {
     private int type;
     private String name;
-    private String Total;
+    private String total;
+    private String available;
+    private String time;
 
-    public UbikeList(int type, String name, String Total) {
+    public UbikeList(int type, String name, String total,String available,String time) {
         this.type = type;
         this.name = name;
-        this.Total = Total;
+        this.total = total;
+        this.available=available;
+        this.time = time;
         // TODO Auto-generated constructor stub
     }
     public int getType(){
@@ -21,14 +25,20 @@ public class UbikeList {
     public void setType(int type){
         this.type = type;
     }
-    public String getName(){
-        return name;
-    }
+    public String getName(){return name;}
     public void setName(String name){this.name = name;}
     public String getTotal(){
-        return Total;
+        return total;
     }
+    public void setTotal(String total){this.total = total;}
+    public String getAvailable(){
+        return available;
+    }
+    public void setAvailable(String available){this.available = available;}
+    public String getTime(){
+        return time;
+    }
+    public void setTime(String time){this.time = time;}
 
-    public void setTotal(String Total){this.Total = Total;}
 
 }

@@ -25,10 +25,14 @@ public class MyAdapter extends BaseAdapter {
     /*private view holder class*/
     private class ViewHolder {
         TextView txtTitle;
+        TextView txtTotal;
+        TextView txtAvailable;
         TextView txtTime;
-        public ViewHolder(TextView txtTitle, TextView txtTime){
+        public ViewHolder(TextView txtTitle, TextView txtTime, TextView txtTotal,TextView txtAvailable){
             this.txtTitle = txtTitle;
             this.txtTime = txtTime;
+            this.txtTotal = txtTotal;
+            this.txtAvailable=txtAvailable;
         }
     }
 
@@ -54,7 +58,9 @@ public class MyAdapter extends BaseAdapter {
             convertView = myInflater.inflate(R.layout.listview, null);
             holder = new ViewHolder(
                     (TextView) convertView.findViewById(R.id.title),
-                    (TextView) convertView.findViewById(R.id.time)
+                    (TextView) convertView.findViewById(R.id.time),
+                    (TextView) convertView.findViewById(R.id.total),
+                    (TextView) convertView.findViewById(R.id.available)
             );
             convertView.setTag(holder);
         }else{
@@ -71,7 +77,13 @@ public class MyAdapter extends BaseAdapter {
         holder.txtTitle.setText(ubikelist.getName());
         holder.txtTitle.setTextColor(color_title[type_num]);
         holder.txtTitle.setBackgroundColor(color_back[type_num]);
-        holder.txtTime.setText(ubikelist.getTotal());
+        holder.txtTotal.setText(ubikelist.getTotal());
+        holder.txtTotal.setTextColor(color_title[type_num]);
+        holder.txtTotal.setBackgroundColor(color_back[type_num]);
+        holder.txtAvailable.setText(ubikelist.getAvailable());
+        holder.txtAvailable.setTextColor(color_title[type_num]);
+        holder.txtAvailable.setBackgroundColor(color_back[type_num]);
+        holder.txtTime.setText(ubikelist.getTime());
         holder.txtTime.setTextColor(color_time[type_num]);
         holder.txtTime.setVisibility(time_vis[type_num]);
 
