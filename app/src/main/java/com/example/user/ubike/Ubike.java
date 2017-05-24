@@ -3,6 +3,7 @@ package com.example.user.ubike;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -16,7 +17,10 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
+import android.os.PowerManager;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -28,10 +32,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -95,6 +101,7 @@ public class Ubike extends AppCompatActivity {
     private List<UbikeList> ubike_list = new ArrayList<UbikeList>();
     private String[] ListStr = new String[2];
     private MyAdapter adapter;
+    private AlertDialog askOpenLocationDialog;
     private Handler handler = new Handler();
     private Long startTime;
     private LatLng nowposition ,markerPosition,myPosition;
@@ -107,6 +114,7 @@ public class Ubike extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.googlemap);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -119,7 +127,7 @@ public class Ubike extends AppCompatActivity {
 //        final String[] available = bundle.getStringArray("available");
 //        final String[] total = bundle.getStringArray("total");
 
-
+//        askOpenLocation("請開啟GPS定位");
 
         OkHttpClient mOkHttpClient = new OkHttpClient();
         Request request = new Request.Builder()
@@ -140,7 +148,6 @@ public class Ubike extends AppCompatActivity {
                 Gson gson = new Gson();
 //                    MainActivity.Data data = gson.fromJson(mJson, MainActivity.Data.class);
                 Ubike.Data data=gson.fromJson(mJson,Ubike.Data.class);
-
 
                 String[] list_item = new String[data.features.length];
                 String[] Lat = new String[data.features.length];
@@ -259,7 +266,47 @@ public class Ubike extends AppCompatActivity {
             }
         });
     }
+    public void askOpenLocation(final String text) {
+        new Thread(new Runnable() {
+            public void run() {
+                Looper.prepare();
+                PowerManager pm = (PowerManager) Ubike.this.getSystemService(Context.POWER_SERVICE);
+                PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.FULL_WAKE_LOCK, "My_App");
 
+                wl.acquire();
+
+                Toast.makeText(Ubike.this,text, Toast.LENGTH_SHORT).show();
+
+                if(askOpenLocationDialog!=null)askOpenLocationDialog.cancel();
+                askOpenLocationDialog = new AlertDialog.Builder(Ubike.this).setTitle("未獲得定位資訊")
+                        .setMessage(text+"\n"//
+                                +"是否啟用定位功能？")
+                        .setPositiveButton("啟用",
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // 使用Intent物件啟動設定程式來更改GPS設定
+                                        Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        Ubike.this.startActivity(i);
+                                        askOpenLocationDialog.cancel();
+                                    }
+                                })
+                        .setNegativeButton("不啟用", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                askOpenLocationDialog.cancel();
+                            }
+                        }).create();
+
+                askOpenLocationDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+                askOpenLocationDialog.show();
+                wl.release();
+                Looper.loop();
+            }
+
+        }).start();
+    }
     private Runnable updateTimer = new Runnable() {
         public void run() {
             final TextView time = (TextView) findViewById(R.id.timer);
@@ -457,14 +504,10 @@ public class Ubike extends AppCompatActivity {
                                         .snippet("車輛總數: " +title_total_all[getID()]+"\n可租借數: " +title_available_all[getID()]+"\n查看更多")
                                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
                                 Map.addMarker(end);
-
-                                String url = getDirectionsUrl(myPosition, markerPosition,"WALKING");//第一個座標LatLng 導航至第二個座標LatLng
-                                DownloadTask downloadTask = new DownloadTask();
-                                // Start downloading json data from Google Directions
-                                // API
-                                downloadTask.execute(url);
+                                donavigation(myPosition,markerPosition,"walking");   //走路導航路線
+//                                donavigation(myPosition,markerPosition,"driving"); //開車導航路線
+//                                donavigation(myPosition,markerPosition,"transit"); //捷運導航路線
                             } catch (ActivityNotFoundException anfe) {
-//                                Toast.makeText(Ubike.this, "內部導航沒動作", Toast.LENGTH_SHORT).show();
                                 Log.e("內部導航","沒動作");
                             }
                         }else if (position == 2) {
@@ -626,6 +669,13 @@ public class Ubike extends AppCompatActivity {
 
         return distance;
     }
+    private void donavigation(LatLng first,LatLng end,String mode){
+        String url = getDirectionsUrl(first,end,mode);//第一個座標LatLng 導航至第二個座標LatLng
+        DownloadTask downloadTask = new DownloadTask();
+        // Start downloading json data from Google Directions
+        // API
+        downloadTask.execute(url);
+    }
 
     private String getDirectionsUrl(LatLng origin, LatLng dest,String mode) {
 
@@ -644,7 +694,7 @@ public class Ubike extends AppCompatActivity {
 
         // Building the parameters to the web service
 //        String parameters = str_origin + "&" + str_dest + "&" +str_travel+"&"+ sensor;
-        String parameters = str_origin + "&" + str_dest + "&sensor=true&language=zh-TW&mode="+mode;
+        String parameters = str_origin + "&" + str_dest + "&sensor=false&language=zh-TW&mode="+mode;
 
         // Output format
         String output = "json";
@@ -652,7 +702,7 @@ public class Ubike extends AppCompatActivity {
         // Building the url to the web service
         String url = "https://maps.googleapis.com/maps/api/directions/"
                 + output + "?" + parameters;
-
+        System.out.println("getDerectionsURL--->: " + url);
         return url;
     }
 
@@ -786,9 +836,7 @@ public class Ubike extends AppCompatActivity {
                 lineOptions.addAll(points);
                 lineOptions.width(15);  //導航路徑寬度
                 lineOptions.color(Color.GREEN); //導航路徑顏色
-
             }
-
             // Drawing polyline in the Google Map for the i-th route
             Map.addPolyline(lineOptions);
         }
