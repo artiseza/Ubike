@@ -34,6 +34,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -70,6 +71,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class Ubike extends AppCompatActivity {
@@ -109,6 +112,12 @@ public class Ubike extends AppCompatActivity {
     private String list_item_all[] ,Lat_all[] ,Lng_all[] ,title_name_all[] ,title_total_all[] ,title_available_all[] ,stationId_all[];
     private String on_click_marker_name;
     private int ID;            //站編號
+    private Button button;
+
+    private int init= 0;
+    private boolean startflag=false;
+    private int tsec=0,csec=0,cmin=0;
+    private TextView textView;
 
 
     @Override
@@ -118,7 +127,7 @@ public class Ubike extends AppCompatActivity {
         setContentView(R.layout.googlemap);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        TextView textView =(TextView)findViewById(R.id.timer);
+        final TextView textView =(TextView)findViewById(R.id.timer);
 
 //        Bundle bundle = getIntent().getExtras();
 //        final String[] list = bundle.getStringArray("string-array");
@@ -195,8 +204,19 @@ public class Ubike extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        for (int i = 0; i < title_name_all.length; i++) {
+            Double j = Double.parseDouble(Lat_all[i]);
+            Double k = Double.parseDouble(Lng_all[i]);
+            Pois.add(new Poi(title_name_all[i],title_total_all[i],title_available_all[i],k, j));
+        }
+
         MyDBHelper dbHelper = new MyDBHelper(Ubike.this);
         dbrw = dbHelper.getWritableDatabase();
+
+//        //宣告Timer
+//        Timer timer01 =new Timer();
+//        //設定Timer(task為執行內容，0代表立刻開始,間格1秒執行一次)
+//        timer01.schedule(task, 0,1000);
 
         //通过Resource方式设置背景图片
         textView.setBackgroundResource(R.drawable.timer);
@@ -205,12 +225,28 @@ public class Ubike extends AppCompatActivity {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //取得目前時間
-                startTime = System.currentTimeMillis();
-                //設定定時要執行的方法
-                handler.removeCallbacks(updateTimer);
-                //設定Delay的時間
-                handler.postDelayed(updateTimer, 1000);
+//                startflag=true;
+                init++;
+                switch (init) {
+                    case 1:
+                    //取得目前時間
+                        String a =String.valueOf(init);
+                        Log.e("agn",a);
+                    startTime = System.currentTimeMillis();
+                    //設定定時要執行的方法
+                    handler.removeCallbacks(updateTimer);
+                    //設定Delay的時間
+                    handler.postDelayed(updateTimer, 1000);
+                        break;
+                    case 2:
+//                        TimerDestroy();
+//                        textView.setText("00:00");
+//                        init=0;
+                        break;
+                    case 3:
+
+                        break;
+                }
             }
         });
 
@@ -304,7 +340,6 @@ public class Ubike extends AppCompatActivity {
                 wl.release();
                 Looper.loop();
             }
-
         }).start();
     }
     private Runnable updateTimer = new Runnable() {
@@ -315,10 +350,25 @@ public class Ubike extends AppCompatActivity {
             Long minius = (spentTime/1000)/60;
             //計算目前已過秒數
             Long seconds = (spentTime/1000) % 60;
+//            if(init==1){
             time.setText(minius+":"+seconds);
+//            }
+//            else {
+//                time.setText("00:00");
+//                init=0;
+//                TimerDestroy();
+//            }
+
             handler.postDelayed(this, 1000);
         }
     };
+
+    protected void TimerDestroy() {
+    //將執行緒銷毀掉
+        handler.removeCallbacks(updateTimer);
+        super.onDestroy();
+    }
+
 
     private void ShowStopStation(){
         Map.clear();
@@ -363,7 +413,7 @@ public class Ubike extends AppCompatActivity {
         for (int i = 0; i < title_name_all.length; i++) {
             Double j = Double.parseDouble(Lat_all[i]);
             Double k = Double.parseDouble(Lng_all[i]);
-            Pois.add(new Poi(list_item_all[i], k, j));
+//            Pois.add(new Poi(list_item_all[i], k, j));
         }
 
         for (int i = 0; i < title_name_all.length; i++) {
@@ -423,38 +473,48 @@ public class Ubike extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_compose:
                 setContentView(R.layout.list);
-                listV=(ListView)findViewById(R.id.listview01);
-                clearList(ubike_list);
-                for (int i = 0; i < list_item_all.length; i++) {
-                    ubike_list.add(new UbikeList(0, Pois.get(i).getName() , DistanceText(Pois.get(i).getDistance())));
-//                    ubike_list.add(new UbikeList(0, list_item_all[i],"9:00") );
-//                    Log.e("ans",list_item_all[i]);
-                }
-                adapter = new MyAdapter(Ubike.this,ubike_list);
-                listV.setAdapter(adapter);
-                break;
-            case R.id.action_delete:
-                setContentView(R.layout.list);
                 TextView Title = (TextView)findViewById(R.id.title);
                 TextView Distance = (TextView)findViewById(R.id.time);
                 String index = "sequence\n",title="bookname\n",distance="distance\n";
                 String[] colum={"title","distance"};
 
-                        Cursor cursor;
+                Cursor cursor;
                 cursor=dbrw.query("myTable",colum,null,null,null,null,null);
 
-                        if(cursor.getCount()>0){
+                if(cursor.getCount()>0){
                     cursor.moveToFirst();
 
-                            for(int i=0;i<cursor.getCount();i++){
-                            index += (i+1)+"\n";
-                            title += cursor.getString(0)+"\n";
-                            distance += cursor.getString(1)+"\n";
-                           cursor.moveToNext();
-                       }
-                   Title.setText(title);
-                   Distance.setText(distance);
-               }
+                    for(int i=0;i<cursor.getCount();i++){
+                        index += (i+1)+"\n";
+                        title += cursor.getString(0)+"\n";
+                        distance += cursor.getString(1)+"\n";
+                        cursor.moveToNext();
+                    }
+                    Title.setText(title);
+                    Distance.setText(distance);
+                }
+                break;
+            case R.id.action_delete:
+                setContentView(R.layout.list);
+                listV=(ListView)findViewById(R.id.listview01);
+                button=(Button)findViewById(R.id.favourite);
+
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                });
+
+                clearList(ubike_list);
+                for (int i = 0; i < list_item_all.length; i++) {
+                    ubike_list.add(new UbikeList(0, Pois.get(i).getName()
+                            ,"車輛總數:"+Pois.get(i).getTotal()
+                            ,"可租借數:"+Pois.get(i).getAvailable()
+                            ,DistanceText(Pois.get(i).getDistance())));
+                }
+                adapter = new MyAdapter(Ubike.this,ubike_list);
+                listV.setAdapter(adapter);
                 break;
 
             default:
@@ -553,21 +613,27 @@ public class Ubike extends AppCompatActivity {
         private double Latitude;    //緯度
         private double Longitude;   //經度
         private double Distance;    //距離
+        private String Total;
+        private String Available;
         private int Favorite=0;     //最愛
 
         //建立物件時需帶入名稱、緯度、經度
-        public Poi(String name, double latitude, double longitude) {
+        public Poi(String name,String total,String available,double latitude, double longitude) {
             //將資訊帶入類別屬性
             Name = name;
+            Total =total;
+            Available = available;
             Latitude = latitude;
             Longitude = longitude;
+
         }
 
         //取得名稱
         public String getName() {
             return Name;
         }
-
+        public String getTotal(){return Total;}
+        public String getAvailable(){return Available;}
         //取得緯度
         public double getLatitude() {
             return Latitude;
