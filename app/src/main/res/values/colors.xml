@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="btn_orange">#F6CC77</color>
+    <color name="btn_orange1">#EABE71</color>
+    <color name="btn_orange2">#F3AE1B</color>
+    <color name="btn_orange3">#BB6008</color>
+    <color name="btn_white">#FFFFFFFF</color>
+    <color name="btn_all_black">#000000</color>
+    <color name="btn_black">#48474D</color>
+    <color name="btn_black1">#717071</color>
+    <color name="btn_black2">#9a999a</color>
+    <color name="btn_black3">#343434</color>
+    <color name="btn_black4">#171717</color>
+    <color name="btn_blue">#6bb4bc</color>
+    <color name="btn_green">#00A199</color>
+    <color name="btn_aoi1">#5faaae</color>
+    <color name="btn_aoi2">#6fc3c8</color>
+    <color name="btn_gray1">#dcdcdd</color>
+    <color name="btn_gray2">#b4b5b5</color>
+    <color name="btn_land1">#ecae32</color>
+    <color name="btn_land3">#b29c8d</color>
+    <color name="btn_land4">#89776b</color>
+    <color name="btn_white3">#00000000</color>
+    <color name="btn_white4">#e0e0e0</color>
+    <color name="btn_yellow1">#ffcb48</color>
+    <color name="btn_yellow2">#e6a400</color>
+    <color name="selector_focused">#00000000</color>
+    <color name="selector_pressed">#1a000000</color>
+    <color name="button_bar">#b0d1e6</color>
+    <color name="btn_green1">#FF29BB9C</color>
+    <color name="btn_red1">#FFFF6C6C</color>
+    <color name="btn_grown1">#FF646464</color>
+</resources>

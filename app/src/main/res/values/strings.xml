@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Ubike</string>
+    <string name="title_activity_ubike">Map</string>
+    <string-array name="mapList">
+        <item>加入我的最愛</item>
+        <item>導航至此站</item>
+        <item>GoogleMap導航</item>
+        <item>取消</item>
+    </string-array>
+</resources>
