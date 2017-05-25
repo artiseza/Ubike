@@ -2,13 +2,17 @@ package com.example.user.ubike;
 
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
+import android.content.ClipData;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -16,11 +20,13 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
 import android.provider.Settings;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -65,8 +71,10 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -96,22 +104,49 @@ public class Ubike extends AppCompatActivity {
     }
     //    private Activity mActivity;
     private LocationManager mLocationManager;
-
     private ArrayList<Poi> Pois = new ArrayList<>();
     @SuppressWarnings("unused")
+    Thread thread;
+    private Handler handler =new Handler();
     private com.google.android.gms.maps.GoogleMap Map;
     private ListView listV;
     private List<UbikeList> ubike_list = new ArrayList<UbikeList>();
     private String[] ListStr = new String[2];
     private MyAdapter adapter;
     private AlertDialog askOpenLocationDialog;
-    private Handler handler = new Handler();
     private Long startTime;
     private LatLng nowposition ,markerPosition,myPosition;
     SQLiteDatabase dbrw;
-    private String list_item_all[] ,Lat_all[] ,Lng_all[] ,title_name_all[] ,title_total_all[] ,title_available_all[] ,stationId_all[];
+    int X=0;
+    public String list_item_all[] ,Lat_all[] ,Lng_all[] ,title_name_all[] ,title_total_all[] ,title_available_all[] ,stationId_all[];
     private String on_click_marker_name;
     private int ID;            //站編號
+
+    private Button button;
+    private int[] drawable_bike_park={R.drawable.bike_park_1,R.drawable.bike_park_2,R.drawable.bike_park_3,R.drawable.bike_park_4,R.drawable.bike_park_5,
+            R.drawable.bike_park_6,R.drawable.bike_park_7,R.drawable.bike_park_8,R.drawable.bike_park_9,R.drawable.bike_park_10,R.drawable.bike_park_11,
+            R.drawable.bike_park_12,R.drawable.bike_park_13,R.drawable.bike_park_14,R.drawable.bike_park_15,R.drawable.bike_park_16,R.drawable.bike_park_17,
+            R.drawable.bike_park_18,R.drawable.bike_park_19,R.drawable.bike_park_20,R.drawable.bike_park_21,R.drawable.bike_park_22,R.drawable.bike_park_23,
+            R.drawable.bike_park_24,R.drawable.bike_park_25,R.drawable.bike_park_26,R.drawable.bike_park_27,R.drawable.bike_park_28,R.drawable.bike_park_29,
+            R.drawable.bike_park_30,R.drawable.bike_park_31,R.drawable.bike_park_32,R.drawable.bike_park_33,R.drawable.bike_park_34,R.drawable.bike_park_35,
+            R.drawable.bike_park_36,R.drawable.bike_park_37,R.drawable.bike_park_38,R.drawable.bike_park_39,R.drawable.bike_park_40,R.drawable.bike_park_41,
+            R.drawable.bike_park_42,R.drawable.bike_park_43,R.drawable.bike_park_44,R.drawable.bike_park_45,R.drawable.bike_park_46,R.drawable.bike_park_47,
+            R.drawable.bike_park_48,R.drawable.bike_park_49,R.drawable.bike_park_50,R.drawable.bike_park_51,R.drawable.bike_park_52,R.drawable.bike_park_53,
+            R.drawable.bike_park_54,R.drawable.bike_park_55,R.drawable.bike_park_56,R.drawable.bike_park_57,R.drawable.bike_park_58,R.drawable.bike_park_59,
+            R.drawable.bike_park_60,R.drawable.bike_park_61,R.drawable.bike_park_62,R.drawable.bike_park_63,R.drawable.bike_park_64,R.drawable.bike_park_65,
+            R.drawable.bike_park_66,R.drawable.bike_park_67,R.drawable.bike_park_68,R.drawable.bike_park_69,R.drawable.bike_park_70};
+    private int[] drawable_bike_rent={R.drawable.bike_rent_1,R.drawable.bike_rent_2,R.drawable.bike_rent_3,R.drawable.bike_rent_4,R.drawable.bike_rent_5,
+            R.drawable.bike_rent_6,R.drawable.bike_rent_7,R.drawable.bike_rent_8,R.drawable.bike_rent_9,R.drawable.bike_rent_10,R.drawable.bike_rent_11,
+            R.drawable.bike_rent_12,R.drawable.bike_rent_13,R.drawable.bike_rent_14,R.drawable.bike_rent_15,R.drawable.bike_rent_16,R.drawable.bike_rent_17,
+            R.drawable.bike_rent_18,R.drawable.bike_rent_19,R.drawable.bike_rent_20,R.drawable.bike_rent_21,R.drawable.bike_rent_22,R.drawable.bike_rent_23,
+            R.drawable.bike_rent_24,R.drawable.bike_rent_25,R.drawable.bike_rent_26,R.drawable.bike_rent_27,R.drawable.bike_rent_28,R.drawable.bike_rent_29,
+            R.drawable.bike_rent_30,R.drawable.bike_rent_31,R.drawable.bike_rent_32,R.drawable.bike_rent_33,R.drawable.bike_rent_34,R.drawable.bike_rent_35,
+            R.drawable.bike_rent_36,R.drawable.bike_rent_37,R.drawable.bike_rent_38,R.drawable.bike_rent_39,R.drawable.bike_rent_40,R.drawable.bike_rent_41,
+            R.drawable.bike_rent_42,R.drawable.bike_rent_43,R.drawable.bike_rent_44,R.drawable.bike_rent_45,R.drawable.bike_rent_46,R.drawable.bike_rent_47,
+            R.drawable.bike_rent_48,R.drawable.bike_rent_49,R.drawable.bike_rent_50,R.drawable.bike_rent_51,R.drawable.bike_rent_52,R.drawable.bike_rent_53,
+            R.drawable.bike_rent_54,R.drawable.bike_rent_55,R.drawable.bike_rent_56,R.drawable.bike_rent_57,R.drawable.bike_rent_58,R.drawable.bike_rent_59,
+            R.drawable.bike_rent_60,R.drawable.bike_rent_61,R.drawable.bike_rent_62,R.drawable.bike_rent_63,R.drawable.bike_rent_64,R.drawable.bike_rent_65,
+            R.drawable.bike_rent_66,R.drawable.bike_rent_67,R.drawable.bike_rent_68,R.drawable.bike_rent_69,R.drawable.bike_rent_70};
 
     private int init= 0;
     private Long Minius;
@@ -121,13 +156,123 @@ public class Ubike extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.googlemap);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        final TextView textView =(TextView)findViewById(R.id.timer);
-        final TextView moneytext =(TextView)findViewById(R.id.money);
-        final int money=5;
+//        askOpenLocation("請開啟GPS定位");
+//        runThread();
+//        LayoutInflater inflater =  getLayoutInflater();
+////        final View view1 = inflater.inflate(R.layout.googlemap, null);//找出第一個視窗
+//        final View view2 = inflater.inflate(R.layout.activity_loading, null);//找出第二個視窗
+//        setContentView(view2); //顯示第一個視窗
+//        Intent i=new Intent();
+//        i.setClass(Ubike.this,LoadingActivity.class);
+//        startActivityForResult(i,0);
+
+
+        getUbikeAPI();
+
+//        do while(! String.valueOf(X).toString().equals("1")){
+            try {
+                thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+//            runThread();//跑 LOADING畫面
+//        }
+//        for(;!String.valueOf(X).toString().equals("1");){
+//        }
+        final ToggleButton mToggleButton = (ToggleButton) findViewById(R.id.mToggleButton);
+
+        mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        final SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mToggleButton.setChecked(false);
+        mapFragment.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(final com.google.android.gms.maps.GoogleMap googleMap) {
+                Map = googleMap;
+                if (ActivityCompat.checkSelfPermission(Ubike.this,
+                        android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                        ActivityCompat.checkSelfPermission(Ubike.this,
+                                android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+
+                ShowRentStation();//顯示可租圖片及可租圖示
+//                runThread(2);
+
+                mToggleButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        if (mToggleButton.isChecked()) {    // 按鈕按下顯示可租按鈕及圖示
+                            ShowStopStation();//顯示可停圖示
+                        } else {                              // 按鈕按下顯示可停按鈕及圖示
+                            ShowRentStation();//顯示可租圖示
+                        }
+                    }
+                });
+
+                googleMap.getUiSettings().setMapToolbarEnabled(false);//隱藏地圖選單
+                googleMap.setMyLocationEnabled(true);  //顯示自己的位置
+                mLocationManager.requestLocationUpdates
+                        (LocationManager.NETWORK_PROVIDER, 0, 10000.0f, LocationChange);
+                CustomInfoWindowAdapter adapter = new CustomInfoWindowAdapter(Ubike.this);
+                googleMap.setInfoWindowAdapter(adapter);
+                googleMap.setOnInfoWindowClickListener(new com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener() {
+                    @Override
+                    public void onInfoWindowClick(Marker arg0) {
+//                    switchstateMap(false);
+//                    markerPosition=arg0.getPosition();
+//                    showRoute(arg0.getPosition());
+                        String marker_title;
+                        markerPosition = arg0.getPosition();
+                        marker_title = arg0.getTitle();
+                        String marker_title_name;
+                        marker_title_name = marker_title.substring(7, marker_title.length());
+                        on_click_marker_name = marker_title_name;
+                        setMapList();
+                    }
+                });
+            }
+        });
+        MyDBHelper dbHelper = new MyDBHelper(Ubike.this);
+        dbrw = dbHelper.getWritableDatabase();
+        dopoisort();
+//        //宣告Timer
+//        Timer timer01 =new Timer();
+//        //設定Timer(task為執行內容，0代表立刻開始,間格1秒執行一次)
+//        timer01.schedule(task, 0,1000);
+
+
+
+//            textView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+////                startflag=true;
+//                    init++;
+//                    switch (init) {
+//                        case 1:
+//                            //取得目前時間
+//                            String a = String.valueOf(init);
+//                            Log.e("agn", a);
+//                            startTime = System.currentTimeMillis();
+//                            //設定定時要執行的方法
+//                            handler.removeCallbacks(updateTimer);
+//                            //設定Delay的時間
+//                            handler.postDelayed(updateTimer, 1000);
+//                            break;
+//                        case 2:
+////                        TimerDestroy();
+////                        textView.setText("00:00");
+////                        init=0;
+//                            break;
+//                        case 3:
+//
+//                            break;
+//                    }
+//                }
+//            });
+
 
 
 //        Bundle bundle = getIntent().getExtras();
@@ -136,9 +281,8 @@ public class Ubike extends AppCompatActivity {
 //        final String[] Lng = bundle.getStringArray("Lng");
 //        final String[] available = bundle.getStringArray("available");
 //        final String[] total = bundle.getStringArray("total");
-
-//        askOpenLocation("請開啟GPS定位");
-
+    }
+    public void getUbikeAPI(){
         OkHttpClient mOkHttpClient = new OkHttpClient();
         Request request = new Request.Builder()
                 .url("http://youbike.pureinformation.net/manifest")
@@ -196,6 +340,7 @@ public class Ubike extends AppCompatActivity {
 
                     Log.e("string",data.features[i].properties.name);
                 }
+
             }
         });
 
@@ -215,6 +360,11 @@ public class Ubike extends AppCompatActivity {
         dbrw = dbHelper.getWritableDatabase();
 
         //通过Resource方式设置背景图片
+        final TextView textView =(TextView)findViewById(R.id.timer);
+
+        final TextView moneytext =(TextView)findViewById(R.id.money);
+        final int money=5;
+
         textView.setBackgroundResource(R.drawable.timer);
         //设置透明
         textView.getBackground().setAlpha(200);
@@ -250,98 +400,9 @@ public class Ubike extends AppCompatActivity {
             }
         });
 
-        final ToggleButton mToggleButton = (ToggleButton) findViewById(R.id.mToggleButton);
-        mToggleButton.setChecked(false);
-        mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        final SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-
-        mapFragment.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(final com.google.android.gms.maps.GoogleMap googleMap) {
-                Map = googleMap;
-                if (ActivityCompat.checkSelfPermission(Ubike.this,
-                        android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                        ActivityCompat.checkSelfPermission(Ubike.this,
-                                android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    return;
-                }
-                ShowRentStation();
-                mToggleButton.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        if (mToggleButton.isChecked()) {    // 當按鈕第一次被點擊時候響應的事件
-                            ShowRentStation();
-                        }
-                        else {                              // 當按鈕再次被點擊時候響應的事件
-                            ShowStopStation();
-                        }
-                    }
-                });
-//                googleMap.set
-                googleMap.setMyLocationEnabled(true);  //顯示自己的位置
-                mLocationManager.requestLocationUpdates
-                        (LocationManager.NETWORK_PROVIDER, 0, 10000.0f, LocationChange);
-                CustomInfoWindowAdapter adapter = new CustomInfoWindowAdapter(Ubike.this);
-                googleMap.setInfoWindowAdapter(adapter);
-                googleMap.setOnInfoWindowClickListener(new com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener() {
-                    @Override
-                    public void onInfoWindowClick(Marker arg0) {
-//                    switchstateMap(false);
-//                    markerPosition=arg0.getPosition();
-//                    showRoute(arg0.getPosition());
-                        String marker_title;
-                        markerPosition = arg0.getPosition();
-                        marker_title =arg0.getTitle();
-                        String marker_title_name;
-                        marker_title_name = marker_title.substring(7,marker_title.length());
-                        on_click_marker_name = marker_title_name;
-                        setMapList();
-                    }
-                });
-            }
-        });
     }
-    public void askOpenLocation(final String text) {
-        new Thread(new Runnable() {
-            public void run() {
-                Looper.prepare();
-                PowerManager pm = (PowerManager) Ubike.this.getSystemService(Context.POWER_SERVICE);
-                PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.FULL_WAKE_LOCK, "My_App");
 
-                wl.acquire();
-
-                Toast.makeText(Ubike.this,text, Toast.LENGTH_SHORT).show();
-
-                if(askOpenLocationDialog!=null)askOpenLocationDialog.cancel();
-                askOpenLocationDialog = new AlertDialog.Builder(Ubike.this).setTitle("未獲得定位資訊")
-                        .setMessage(text+"\n"//
-                                +"是否啟用定位功能？")
-                        .setPositiveButton("啟用",
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        // 使用Intent物件啟動設定程式來更改GPS設定
-                                        Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        Ubike.this.startActivity(i);
-                                        askOpenLocationDialog.cancel();
-                                    }
-                                })
-                        .setNegativeButton("不啟用", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                askOpenLocationDialog.cancel();
-                            }
-                        }).create();
-
-                askOpenLocationDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-                askOpenLocationDialog.show();
-                wl.release();
-                Looper.loop();
-            }
-        }).start();
-    }
     private Runnable updateTimer = new Runnable() {
         public void run() {
             final TextView time = (TextView) findViewById(R.id.timer);
@@ -359,8 +420,35 @@ public class Ubike extends AppCompatActivity {
     protected void TimerStop() {
         //將執行緒銷毀掉
         handler.removeCallbacks(updateTimer);
-    }
 
+//    private Runnable updateTimer = new Runnable() {
+//        public void run() {
+//            final TextView time = (TextView) findViewById(R.id.timer);
+//            Long spentTime = System.currentTimeMillis() - startTime;
+//            //計算目前已過分鐘數
+//            Long minius = (spentTime/1000)/60;
+//            //計算目前已過秒數
+//            Long seconds = (spentTime/1000) % 60;
+////            if(init==1){
+//            time.setText(minius+":"+seconds);
+////            }
+////            else {
+////                time.setText("00:00");
+////                init=0;
+////                TimerDestroy();
+////            }
+//
+//            handler.postDelayed(this, 1000);
+//        }
+//    };
+
+//    protected void TimerDestroy() {
+//    //將執行緒銷毀掉
+//        handler.removeCallbacks(updateTimer);
+//        super.onDestroy();
+//    }
+
+    }
 
     private void ShowStopStation(){
         Map.clear();
@@ -377,7 +465,7 @@ public class Ubike extends AppCompatActivity {
                 markerOptions.position(new LatLng(nLng, nLat))
                         .title(title)
                         .snippet(subTitle)
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                        .icon(BitmapDescriptorFactory.fromBitmap(CreatMarker(GetDrawable(Integer.parseInt(title_total_all[i]),Integer.parseInt(title_available_all[i]),"rent"),60,90)));
                 Map.addMarker(markerOptions);
             }
         }
@@ -395,10 +483,18 @@ public class Ubike extends AppCompatActivity {
                 markerOptions
                         .position(new LatLng(nLng, nLat))
                         .title(title)
-                        .snippet(subTitle)
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+                        .snippet(subTitle);
+//                        .icon(BitmapDescriptorFactory
+//                                .fromBitmap(CreatMarker(GetDrawable(Integer.parseInt(title_total_all[i]),Integer.parseInt(title_available_all[i]),"rent"),60,90)));
                 Map.addMarker(markerOptions);
             }
+        }
+    }
+    private void dopoisort(){
+        for (int b = 0; b < title_name_all.length; b++) {
+            Double j = Double.parseDouble(Lat_all[b]);
+            Double k = Double.parseDouble(Lng_all[b]);
+            Pois.add(new Poi(title_name_all[b], title_total_all[b], title_available_all[b], k, j));
         }
     }
     private void ShowAllStation(){
@@ -417,16 +513,24 @@ public class Ubike extends AppCompatActivity {
             markerOptions.position(new LatLng(nLng, nLat))
                     .title(title)
                     .snippet(subTitle);
+//                    .icon(BitmapDescriptorFactory
+//                        .fromBitmap(CreatMarker(GetDrawable(Integer.parseInt(title_total_all[i]),Integer.parseInt(title_available_all[i]),"park"),60,90)));
             Map.addMarker(markerOptions);
         }
     }
 
+    private Bitmap CreatMarker(int resource, int width, int height) {
+        BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(resource);
+        Bitmap b=bitmapdraw.getBitmap();
+        Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+        return smallMarker;
+    }
     public void onMapSearch(View view) {
         EditText locationSearch = (EditText) findViewById(R.id.editText);
         String location = locationSearch.getText().toString();
         List<Address> addressList = null;
 
-        if (location != null || !location.equals("")) {
+        if (location != null || !location.equals(" ")) {
             Geocoder geocoder = new Geocoder(Ubike.this);
             try {
                 addressList = geocoder.getFromLocationName(location, 1);
@@ -436,8 +540,10 @@ public class Ubike extends AppCompatActivity {
             }
             Address address = addressList.get(0);
             LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-            Map.addMarker(new MarkerOptions().position(latLng).title("Marker"));
+            Map.addMarker(new MarkerOptions().position(latLng).title(location));
             Map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,16));
+        }else{Toast.makeText(Ubike.this,"請輸入地點",Toast.LENGTH_SHORT);
+            ShowRentStation();
         }
     }
     //重写onCreateOptionMenu(Menu menu)方法，当菜单第一次被加载时调用
@@ -455,7 +561,6 @@ public class Ubike extends AppCompatActivity {
 
         return true;
     }
-
     //重写OptionsItemSelected(MenuItem item)来响应菜单项(MenuItem)的点击事件（根据id来区分是哪个item）
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -463,7 +568,7 @@ public class Ubike extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
-            case R.id.action_compose:
+            case R.id.action_favorite:
                 setContentView(R.layout.list);
                 TextView Title = (TextView)findViewById(R.id.title);
                 TextView Distance = (TextView)findViewById(R.id.time);
@@ -486,26 +591,54 @@ public class Ubike extends AppCompatActivity {
                     Distance.setText(distance);
                 }
                 break;
-            case R.id.action_delete:
+            case R.id.action_list:
                 setContentView(R.layout.list);
                 listV=(ListView)findViewById(R.id.listview01);
+
 //                button=(Button)findViewById(R.id.favourite);
+
+                button=(Button)findViewById(R.id.favourite);
+
 
                 clearList(ubike_list);
                 for (int i = 0; i < list_item_all.length; i++) {
                     ubike_list.add(new UbikeList(0, Pois.get(i).getName()
                             ,"車輛總數:"+Pois.get(i).getTotal()
                             ,"可租借數:"+Pois.get(i).getAvailable()
-                            ,DistanceText(Pois.get(i).getDistance())));
+                            ,"距離   :"+DistanceText(Pois.get(i).getDistance())));
                 }
-                adapter = new MyAdapter(Ubike.this,ubike_list);
+                adapter = new MyAdapter(Ubike.this,ubike_list,0);
                 listV.setAdapter(adapter);
                 break;
-
+            case R.id.action_home:
+                Map.clear();
+                ShowRentStation();
+                break;
             default:
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+    private void listOnItemselected(){
+        listV.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+    private void myDatabase(){
+        ContentValues cv =new ContentValues();
+        for(int i=0;i<title_name_all.length;i++) {
+            cv.put("title", title_name_all[i]);
+            cv.put("favorite","0");
+            dbrw.insert("myTable", null, cv);
+        }
     }
     private void setMapList() {
 
@@ -526,56 +659,47 @@ public class Ubike extends AppCompatActivity {
         setPhoto_listView.setSelector(R.drawable.list_item_selector);
         setPhoto_listView.setAdapter(setUserPhotoArrayAdapter);
 
-        setPhoto_listView
-                .setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View v,
-                                            int position, long id) {
-                        if (position == 0) {
-                            try {
+        setPhoto_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View v,
+                                    int position, long id) {
+                if (position == 0) {
+                    try {
+                        Map.clear();
+                        setPhotoDialog.cancel();
 
-                            } catch (ActivityNotFoundException anfe) {
-//                                Toast.makeText(Ubike.this, "加入最愛沒動作", Toast.LENGTH_SHORT).show();
-                                Log.e("加入我的最愛","沒動作");
-                            }
-                        } else if (position == 1) {
-                            try {
-                                Map.clear();
-                                setPhotoDialog.cancel();
-
-                                MarkerOptions end = new MarkerOptions();
-                                end.position(markerPosition)
-                                        .title("\n車站名稱: " +title_name_all[getID()])
-                                        .snippet("車輛總數: " +title_total_all[getID()]+"\n可租借數: " +title_available_all[getID()]+"\n查看更多")
-                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-                                Map.addMarker(end);
-                                donavigation(myPosition,markerPosition,"walking");   //走路導航路線
+                        MarkerOptions end = new MarkerOptions();
+                        end.position(markerPosition)
+                                .title("\n車站名稱: " +title_name_all[getID(title_name_all,on_click_marker_name)])
+                                .snippet("車輛總數: " +title_total_all[getID(title_name_all,on_click_marker_name)]+"\n可租借數: " +title_available_all[getID(title_name_all,on_click_marker_name)]+"\n查看更多")
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                        Map.addMarker(end);
+                        donavigation(myPosition,markerPosition,"walking");   //走路導航路線
 //                                donavigation(myPosition,markerPosition,"driving"); //開車導航路線
 //                                donavigation(myPosition,markerPosition,"transit"); //捷運導航路線
-                            } catch (ActivityNotFoundException anfe) {
-                                Log.e("內部導航","沒動作");
-                            }
-                        }else if (position == 2) {
-                            try {
-                                Uri gmmIntentUri = Uri.parse("google.navigation:q="+markerPosition.latitude
-                                        +","+markerPosition.longitude+"&mode=d");
-                                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                                mapIntent.setPackage("com.google.android.apps.maps");
-                                startActivity(mapIntent);
-                            } catch (ActivityNotFoundException anfe) {
-                                Log.e("跳googleMap","沒動作");
-                            }
-                        }else if (position == 3) {
-                            setPhotoDialog.cancel();
-                        }
-
+                    } catch (ActivityNotFoundException anfe) {
+                        Log.e("內部導航","沒動作");
                     }
-                });
+                } else if (position == 1) {
+                    try {
+                        Uri gmmIntentUri = Uri.parse("google.navigation:q="+markerPosition.latitude
+                                +","+markerPosition.longitude+"&mode=d");
+                        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                        mapIntent.setPackage("com.google.android.apps.maps");
+                        startActivity(mapIntent);
+                    } catch (ActivityNotFoundException anfe) {
+                        Log.e("跳googleMap","沒動作");
+                    }
+                }else if (position == 2) {
+                    setPhotoDialog.cancel();
+                }
+            }
+        });
     }
-    public  int getID(){
+    public int getID(String[] one, String two){
 //        ID= Arrays.binarySearch(title_name_all,on_click_marker_name);
-        for (int i=0;i<title_name_all.length;i++){
-            if(title_name_all[i].toString().equals(on_click_marker_name)){
+        for (int i=0;i<one.length;i++){
+            if(one[i].toString().equals(two)){
                 ID=i;
                 break;
             }else {
@@ -583,6 +707,18 @@ public class Ubike extends AppCompatActivity {
             }
         }
         return ID;
+    }
+    public int GetDrawable(int total,int available,String str){
+        int drawable=R.drawable.bike_park_1;
+        int park,rent;
+        park=total-available;
+        rent=available;
+        if (str.toString().equals("park")){
+            drawable = drawable_bike_park[park-1];
+        }else if (str.toString().equals("rent")){
+            drawable = drawable_bike_rent[rent-1];
+        }
+     return drawable;
     }
     public void clearList(List<UbikeList> ubike_list) {
         int size = ubike_list.size();
@@ -687,7 +823,25 @@ public class Ubike extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        mLocationManager.removeUpdates(LocationChange);  //程式結束時停止定位更新
+//        askOpenLocationDialog = new AlertDialog.Builder(Ubike.this).setTitle(R.string.DailogTitleExitBlueNet)
+//                .setPositiveButton("是",
+//                        new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                Ubike.this.finish();
+//                            }
+//                        })
+//                .setNegativeButton("否", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        askOpenLocationDialog.cancel();
+//                    }
+//                }).create();
+//
+//        askOpenLocationDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+//        askOpenLocationDialog.show();
+
+        mLocationManager.removeUpdates(LocationChange);  //程式結束時停止定位更新
     }
 
     //帶入距離回傳字串 (距離小於一公里以公尺呈現，距離大於一公里以公里呈現並取小數點兩位)
@@ -890,6 +1044,11 @@ public class Ubike extends AppCompatActivity {
             }
             // Drawing polyline in the Google Map for the i-th route
             Map.addPolyline(lineOptions);
+        }
+    }
+    protected void onActivityResult(int requestCode,int resultCode,Intent data){
+        if(requestCode ==102){
+//            runThread(3);
         }
     }
 }

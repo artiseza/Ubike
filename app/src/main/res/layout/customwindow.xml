@@ -19,11 +19,11 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="10dp">
 
-                <ImageButton
+            <ToggleButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/imageButton"
-                    android:background="@drawable/love0"
+                    android:id="@+id/info_favourite"
+                    android:background="@drawable/favorite_selector"
                     android:layout_gravity="center"
                     android:paddingLeft="5dp"
                     android:paddingRight="10dp"/>
