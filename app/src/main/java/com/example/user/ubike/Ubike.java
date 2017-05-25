@@ -112,12 +112,10 @@ public class Ubike extends AppCompatActivity {
     private String list_item_all[] ,Lat_all[] ,Lng_all[] ,title_name_all[] ,title_total_all[] ,title_available_all[] ,stationId_all[];
     private String on_click_marker_name;
     private int ID;            //站編號
-    private Button button;
 
     private int init= 0;
-    private boolean startflag=false;
-    private int tsec=0,csec=0,cmin=0;
-    private TextView textView;
+    private Long Minius;
+
 
 
     @Override
@@ -128,6 +126,9 @@ public class Ubike extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         final TextView textView =(TextView)findViewById(R.id.timer);
+        final TextView moneytext =(TextView)findViewById(R.id.money);
+        final int money=5;
+
 
 //        Bundle bundle = getIntent().getExtras();
 //        final String[] list = bundle.getStringArray("string-array");
@@ -213,11 +214,6 @@ public class Ubike extends AppCompatActivity {
         MyDBHelper dbHelper = new MyDBHelper(Ubike.this);
         dbrw = dbHelper.getWritableDatabase();
 
-//        //宣告Timer
-//        Timer timer01 =new Timer();
-//        //設定Timer(task為執行內容，0代表立刻開始,間格1秒執行一次)
-//        timer01.schedule(task, 0,1000);
-
         //通过Resource方式设置背景图片
         textView.setBackgroundResource(R.drawable.timer);
         //设置透明
@@ -227,24 +223,28 @@ public class Ubike extends AppCompatActivity {
             public void onClick(View v) {
 //                startflag=true;
                 init++;
+                String a =String.valueOf(init);
+                Log.e("agn",a);
                 switch (init) {
                     case 1:
                     //取得目前時間
-                        String a =String.valueOf(init);
-                        Log.e("agn",a);
-                    startTime = System.currentTimeMillis();
+                        startTime = System.currentTimeMillis();
                     //設定定時要執行的方法
-                    handler.removeCallbacks(updateTimer);
+                        handler.removeCallbacks(updateTimer);
                     //設定Delay的時間
-                    handler.postDelayed(updateTimer, 1000);
+                        handler.postDelayed(updateTimer,1000);
+                        moneytext.setText("$"+money);
                         break;
                     case 2:
-//                        TimerDestroy();
-//                        textView.setText("00:00");
-//                        init=0;
+                        TimerStop();
+                        long x=Minius%30;
+                        moneytext.setText("$"+((x*10)+5));
                         break;
                     case 3:
-
+                        //初始化
+                        moneytext.setText("$");
+                        textView.setText("0分");
+                        init=0;
                         break;
                 }
             }
@@ -348,25 +348,17 @@ public class Ubike extends AppCompatActivity {
             Long spentTime = System.currentTimeMillis() - startTime;
             //計算目前已過分鐘數
             Long minius = (spentTime/1000)/60;
+            Minius=minius;
             //計算目前已過秒數
             Long seconds = (spentTime/1000) % 60;
-//            if(init==1){
-            time.setText(minius+":"+seconds);
-//            }
-//            else {
-//                time.setText("00:00");
-//                init=0;
-//                TimerDestroy();
-//            }
-
-            handler.postDelayed(this, 1000);
+            handler.postDelayed(this,1000);
+            time.setText(minius+"分");
         }
     };
 
-    protected void TimerDestroy() {
-    //將執行緒銷毀掉
+    protected void TimerStop() {
+        //將執行緒銷毀掉
         handler.removeCallbacks(updateTimer);
-        super.onDestroy();
     }
 
 
@@ -497,14 +489,7 @@ public class Ubike extends AppCompatActivity {
             case R.id.action_delete:
                 setContentView(R.layout.list);
                 listV=(ListView)findViewById(R.id.listview01);
-                button=(Button)findViewById(R.id.favourite);
-
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                    }
-                });
+//                button=(Button)findViewById(R.id.favourite);
 
                 clearList(ubike_list);
                 for (int i = 0; i < list_item_all.length; i++) {
