@@ -5,9 +5,9 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="btn_orange">#F6CC77</color>
     <color name="btn_orange1">#EABE71</color>
-    <color name="btn_orange2">#F3AE1B</color>
+    <color name="btn_orange2">#f1b869</color>
     <color name="btn_orange3">#BB6008</color>
-    <color name="btn_white">#FFFFFFFF</color>
+    <color name="btn_white">#ffffff</color>
     <color name="btn_all_black">#000000</color>
     <color name="btn_black">#48474D</color>
     <color name="btn_black1">#717071</color>

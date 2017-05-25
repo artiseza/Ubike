@@ -134,7 +134,29 @@ public class Ubike extends AppCompatActivity {
             R.drawable.bike_park_48,R.drawable.bike_park_49,R.drawable.bike_park_50,R.drawable.bike_park_51,R.drawable.bike_park_52,R.drawable.bike_park_53,
             R.drawable.bike_park_54,R.drawable.bike_park_55,R.drawable.bike_park_56,R.drawable.bike_park_57,R.drawable.bike_park_58,R.drawable.bike_park_59,
             R.drawable.bike_park_60,R.drawable.bike_park_61,R.drawable.bike_park_62,R.drawable.bike_park_63,R.drawable.bike_park_64,R.drawable.bike_park_65,
-            R.drawable.bike_park_66,R.drawable.bike_park_67,R.drawable.bike_park_68,R.drawable.bike_park_69,R.drawable.bike_park_70};
+            R.drawable.bike_park_66,R.drawable.bike_park_67,R.drawable.bike_park_68,R.drawable.bike_park_69,R.drawable.bike_park_70,R.drawable.bike_park_71,
+            R.drawable.bike_park_72,R.drawable.bike_park_73,R.drawable.bike_park_74,R.drawable.bike_park_75,R.drawable.bike_park_76,R.drawable.bike_park_77,
+            R.drawable.bike_park_78,R.drawable.bike_park_79,R.drawable.bike_park_80,R.drawable.bike_park_81,R.drawable.bike_park_82,R.drawable.bike_park_83,
+            R.drawable.bike_park_84,R.drawable.bike_park_85,R.drawable.bike_park_86,R.drawable.bike_park_87,R.drawable.bike_park_88,R.drawable.bike_park_89,
+            R.drawable.bike_park_90,R.drawable.bike_park_91,R.drawable.bike_park_92,R.drawable.bike_park_93,R.drawable.bike_park_94,R.drawable.bike_park_95,
+            R.drawable.bike_park_96,R.drawable.bike_park_97,R.drawable.bike_park_98,R.drawable.bike_park_99,R.drawable.bike_park_100,R.drawable.bike_park_101,
+            R.drawable.bike_park_102,R.drawable.bike_park_103,R.drawable.bike_park_104,R.drawable.bike_park_105,R.drawable.bike_park_106,R.drawable.bike_park_107,
+            R.drawable.bike_park_108,R.drawable.bike_park_109,R.drawable.bike_park_110,R.drawable.bike_park_111,R.drawable.bike_park_112,R.drawable.bike_park_113,
+            R.drawable.bike_park_114,R.drawable.bike_park_115,R.drawable.bike_park_116,R.drawable.bike_park_117,R.drawable.bike_park_118,R.drawable.bike_park_119,
+            R.drawable.bike_park_120,R.drawable.bike_park_121,R.drawable.bike_park_122,R.drawable.bike_park_123,R.drawable.bike_park_124,R.drawable.bike_park_125,
+            R.drawable.bike_park_126,R.drawable.bike_park_127,R.drawable.bike_park_128,R.drawable.bike_park_129,R.drawable.bike_park_130,R.drawable.bike_park_131,
+            R.drawable.bike_park_132,R.drawable.bike_park_133,R.drawable.bike_park_134,R.drawable.bike_park_135,R.drawable.bike_park_136,R.drawable.bike_park_137,
+            R.drawable.bike_park_138,R.drawable.bike_park_139,R.drawable.bike_park_140,R.drawable.bike_park_141,R.drawable.bike_park_142,R.drawable.bike_park_143,
+            R.drawable.bike_park_144,R.drawable.bike_park_145,R.drawable.bike_park_146,R.drawable.bike_park_147,R.drawable.bike_park_148,R.drawable.bike_park_149,
+            R.drawable.bike_park_150,R.drawable.bike_park_151,R.drawable.bike_park_152,R.drawable.bike_park_153,R.drawable.bike_park_154,R.drawable.bike_park_155,
+            R.drawable.bike_park_156,R.drawable.bike_park_157,R.drawable.bike_park_158,R.drawable.bike_park_159,R.drawable.bike_park_160,R.drawable.bike_park_161,
+            R.drawable.bike_park_162,R.drawable.bike_park_163,R.drawable.bike_park_164,R.drawable.bike_park_165,R.drawable.bike_park_166,R.drawable.bike_park_167,
+            R.drawable.bike_park_168,R.drawable.bike_park_169,R.drawable.bike_park_170,R.drawable.bike_park_171,R.drawable.bike_park_172,R.drawable.bike_park_173,
+            R.drawable.bike_park_174,R.drawable.bike_park_175,R.drawable.bike_park_176,R.drawable.bike_park_177,R.drawable.bike_park_178,R.drawable.bike_park_179,
+            R.drawable.bike_park_180,R.drawable.bike_park_181,R.drawable.bike_park_182,R.drawable.bike_park_183,R.drawable.bike_park_184,R.drawable.bike_park_185,
+            R.drawable.bike_park_186,R.drawable.bike_park_187,R.drawable.bike_park_188,R.drawable.bike_park_189,R.drawable.bike_park_190,R.drawable.bike_park_191,
+            R.drawable.bike_park_192,R.drawable.bike_park_193,R.drawable.bike_park_194,R.drawable.bike_park_195,R.drawable.bike_park_196,R.drawable.bike_park_197,
+            R.drawable.bike_park_198,R.drawable.bike_park_199,R.drawable.bike_park_200};
     private int[] drawable_bike_rent={R.drawable.bike_rent_1,R.drawable.bike_rent_2,R.drawable.bike_rent_3,R.drawable.bike_rent_4,R.drawable.bike_rent_5,
             R.drawable.bike_rent_6,R.drawable.bike_rent_7,R.drawable.bike_rent_8,R.drawable.bike_rent_9,R.drawable.bike_rent_10,R.drawable.bike_rent_11,
             R.drawable.bike_rent_12,R.drawable.bike_rent_13,R.drawable.bike_rent_14,R.drawable.bike_rent_15,R.drawable.bike_rent_16,R.drawable.bike_rent_17,
@@ -146,7 +168,29 @@ public class Ubike extends AppCompatActivity {
             R.drawable.bike_rent_48,R.drawable.bike_rent_49,R.drawable.bike_rent_50,R.drawable.bike_rent_51,R.drawable.bike_rent_52,R.drawable.bike_rent_53,
             R.drawable.bike_rent_54,R.drawable.bike_rent_55,R.drawable.bike_rent_56,R.drawable.bike_rent_57,R.drawable.bike_rent_58,R.drawable.bike_rent_59,
             R.drawable.bike_rent_60,R.drawable.bike_rent_61,R.drawable.bike_rent_62,R.drawable.bike_rent_63,R.drawable.bike_rent_64,R.drawable.bike_rent_65,
-            R.drawable.bike_rent_66,R.drawable.bike_rent_67,R.drawable.bike_rent_68,R.drawable.bike_rent_69,R.drawable.bike_rent_70};
+            R.drawable.bike_rent_66,R.drawable.bike_rent_67,R.drawable.bike_rent_68,R.drawable.bike_rent_69,R.drawable.bike_rent_70,R.drawable.bike_rent_71,
+            R.drawable.bike_rent_72,R.drawable.bike_rent_73,R.drawable.bike_rent_74,R.drawable.bike_rent_75,R.drawable.bike_rent_76,R.drawable.bike_rent_77,
+            R.drawable.bike_rent_78,R.drawable.bike_rent_79,R.drawable.bike_rent_80,R.drawable.bike_rent_81,R.drawable.bike_rent_82,R.drawable.bike_rent_83,
+            R.drawable.bike_rent_84,R.drawable.bike_rent_85,R.drawable.bike_rent_86,R.drawable.bike_rent_87,R.drawable.bike_rent_88,R.drawable.bike_rent_89,
+            R.drawable.bike_rent_90,R.drawable.bike_rent_91,R.drawable.bike_rent_92,R.drawable.bike_rent_93,R.drawable.bike_rent_94,R.drawable.bike_rent_95,
+            R.drawable.bike_rent_96,R.drawable.bike_rent_97,R.drawable.bike_rent_98,R.drawable.bike_rent_99,R.drawable.bike_rent_100,R.drawable.bike_rent_101,
+            R.drawable.bike_rent_102,R.drawable.bike_rent_103,R.drawable.bike_rent_104,R.drawable.bike_rent_105,R.drawable.bike_rent_106,R.drawable.bike_rent_107,
+            R.drawable.bike_rent_108,R.drawable.bike_rent_109,R.drawable.bike_rent_110,R.drawable.bike_rent_111,R.drawable.bike_rent_112,R.drawable.bike_rent_113,
+            R.drawable.bike_rent_114,R.drawable.bike_rent_115,R.drawable.bike_rent_116,R.drawable.bike_rent_117,R.drawable.bike_rent_118,R.drawable.bike_rent_119,
+            R.drawable.bike_rent_120,R.drawable.bike_rent_121,R.drawable.bike_rent_122,R.drawable.bike_rent_123,R.drawable.bike_rent_124,R.drawable.bike_rent_125,
+            R.drawable.bike_rent_126,R.drawable.bike_rent_127,R.drawable.bike_rent_128,R.drawable.bike_rent_129,R.drawable.bike_rent_130,R.drawable.bike_rent_131,
+            R.drawable.bike_rent_132,R.drawable.bike_rent_133,R.drawable.bike_rent_134,R.drawable.bike_rent_135,R.drawable.bike_rent_136,R.drawable.bike_rent_137,
+            R.drawable.bike_rent_138,R.drawable.bike_rent_139,R.drawable.bike_rent_140,R.drawable.bike_rent_141,R.drawable.bike_rent_142,R.drawable.bike_rent_143,
+            R.drawable.bike_rent_144,R.drawable.bike_rent_145,R.drawable.bike_rent_146,R.drawable.bike_rent_147,R.drawable.bike_rent_148,R.drawable.bike_rent_149,
+            R.drawable.bike_rent_150,R.drawable.bike_rent_151,R.drawable.bike_rent_152,R.drawable.bike_rent_153,R.drawable.bike_rent_154,R.drawable.bike_rent_155,
+            R.drawable.bike_rent_156,R.drawable.bike_rent_157,R.drawable.bike_rent_158,R.drawable.bike_rent_159,R.drawable.bike_rent_160,R.drawable.bike_rent_161,
+            R.drawable.bike_rent_162,R.drawable.bike_rent_163,R.drawable.bike_rent_164,R.drawable.bike_rent_165,R.drawable.bike_rent_166,R.drawable.bike_rent_167,
+            R.drawable.bike_rent_168,R.drawable.bike_rent_169,R.drawable.bike_rent_170,R.drawable.bike_rent_171,R.drawable.bike_rent_172,R.drawable.bike_rent_173,
+            R.drawable.bike_rent_174,R.drawable.bike_rent_175,R.drawable.bike_rent_176,R.drawable.bike_rent_177,R.drawable.bike_rent_178,R.drawable.bike_rent_179,
+            R.drawable.bike_rent_180,R.drawable.bike_rent_181,R.drawable.bike_rent_182,R.drawable.bike_rent_183,R.drawable.bike_rent_184,R.drawable.bike_rent_185,
+            R.drawable.bike_rent_186,R.drawable.bike_rent_187,R.drawable.bike_rent_188,R.drawable.bike_rent_189,R.drawable.bike_rent_190,R.drawable.bike_rent_191,
+            R.drawable.bike_rent_192,R.drawable.bike_rent_193,R.drawable.bike_rent_194,R.drawable.bike_rent_195,R.drawable.bike_rent_196,R.drawable.bike_rent_197,
+            R.drawable.bike_rent_198,R.drawable.bike_rent_199,R.drawable.bike_rent_200};
 
     private int init= 0;
     private Long Minius;
@@ -345,7 +389,7 @@ public class Ubike extends AppCompatActivity {
         });
 
         try {
-            Thread.sleep(5000);
+            Thread.sleep(8000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -465,7 +509,7 @@ public class Ubike extends AppCompatActivity {
                 markerOptions.position(new LatLng(nLng, nLat))
                         .title(title)
                         .snippet(subTitle)
-                        .icon(BitmapDescriptorFactory.fromBitmap(CreatMarker(GetDrawable(Integer.parseInt(title_total_all[i]),Integer.parseInt(title_available_all[i]),"rent"),60,90)));
+                        .icon(BitmapDescriptorFactory.fromBitmap(CreatMarker(GetDrawable(Integer.parseInt(title_total_all[i]),Integer.parseInt(title_available_all[i]),"park"),100,100)));
                 Map.addMarker(markerOptions);
             }
         }
@@ -483,9 +527,9 @@ public class Ubike extends AppCompatActivity {
                 markerOptions
                         .position(new LatLng(nLng, nLat))
                         .title(title)
-                        .snippet(subTitle);
-//                        .icon(BitmapDescriptorFactory
-//                                .fromBitmap(CreatMarker(GetDrawable(Integer.parseInt(title_total_all[i]),Integer.parseInt(title_available_all[i]),"rent"),60,90)));
+                        .snippet(subTitle)
+                        .icon(BitmapDescriptorFactory
+                                .fromBitmap(CreatMarker(GetDrawable(Integer.parseInt(title_total_all[i]),Integer.parseInt(title_available_all[i]),"rent"),100,100)));
                 Map.addMarker(markerOptions);
             }
         }
@@ -609,10 +653,6 @@ public class Ubike extends AppCompatActivity {
                 }
                 adapter = new MyAdapter(Ubike.this,ubike_list,0);
                 listV.setAdapter(adapter);
-                break;
-            case R.id.action_home:
-                Map.clear();
-                ShowRentStation();
                 break;
             default:
                 break;

@@ -25,6 +25,8 @@
                     android:id="@+id/info_favourite"
                     android:background="@drawable/favorite_selector"
                     android:layout_gravity="center"
+                    android:textOff=""
+                    android:textOn=""
                     android:paddingLeft="5dp"
                     android:paddingRight="10dp"/>
             </FrameLayout>

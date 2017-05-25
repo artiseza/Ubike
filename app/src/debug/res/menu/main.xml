@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"><![CDATA[
     tools:context=".MainActivity" >
 
 
-    <item
-        android:id="@+id/action_home"
-        android:icon="@drawable/list"
-        app:showAsAction="always"
-        android:title="主頁"/>
+    ]]>
     <item
         android:id="@+id/action_favorite"
         app:showAsAction="ifRoom"
