@@ -100,10 +100,10 @@
                         android:text="$"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="50sp"
-                        android:layout_marginTop="260sp"
+                        android:layout_marginLeft="20sp"
+                        android:layout_marginTop="200sp"
                         android:id="@+id/money"
-                         />
+                        android:textAlignment="center" />
 
                 </LinearLayout>
 
