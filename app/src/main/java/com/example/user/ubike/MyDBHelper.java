@@ -22,7 +22,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db){
         db.execSQL("CREATE TABLE myTable(_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "title text no null," +
-                "price real no null)");
+                "favorite real no null)");
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){

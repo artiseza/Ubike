@@ -1,63 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
     <!-- first row that Country and publish date -->
 
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <Button
-            android:text=""
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:background="@drawable/love0"
-            android:layout_margin="15sp"
-            android:id="@+id/favourite" />
-    </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1">>
+            <Button
+                android:text=""
+                android:background="@drawable/favorite_selector"
+                android:layout_margin="15sp"
+                android:id="@+id/favourite"
+                android:layout_height="40dp"
+                android:layout_width="40dp"
+                android:onClick="favorite_change"/>
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/title"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15sp"
-            android:layout_gravity="center_vertical" />
-    </LinearLayout>
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:layout_marginRight="5dp">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1">
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="title"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="25dp"
+                android:textAlignment="center"
+                />
+        </LinearLayout>
 
-        <TextView
-            android:text="TextView"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:id="@+id/total" />
+            android:layout_height="match_parent"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="5dp">
 
-        <TextView
-            android:text="TextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:id="@+id/available" />
-        <TextView
-            android:id="@+id/time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"/>
+            <TextView
+                android:text="TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:id="@+id/total"
+                />
+
+            <TextView
+                android:text="TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:id="@+id/available" />
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:text="TextView"/>
+        </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>
